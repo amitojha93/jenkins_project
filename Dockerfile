@@ -1,11 +1,12 @@
-FROM  centos:latest
-RUN yum install -y httpd \
- zip\
- unzip
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
-WORKDIR /var/www/html/
-RUN unzip photogenic.zip
-RUN cp -rvf photogenic/* .
-RUN rm -rf photogenic photogenic.zip
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-EXPOSE 80
+FROM dokken/amazonlinux-2
+MAINTAINER amitojha93
+WORKDIR /opt
+Add 'https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.88/bin/apache-tomcat-8.5.88.zip' /opt/
+RUN yum install unzip -y
+RUN yum install telnet -y
+RUN yum install vim -y
+RUN unzip apache-tomcat-8.5.88.zip
+RUN chmod +x apache-tomcat-8.5.88/bin/*
+RUN amazon-linux-extras install java-openjdk11 -y
+COPY ./sample.war /opt/apache-tomcat-8.5.88/webapps/
+CMD [ "/opt/apache-tomcat-8.5.88/bin/catalina.sh", "run" ]
